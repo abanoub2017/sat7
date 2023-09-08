@@ -1,9 +1,11 @@
 <template>
     <main class="min-h-screen bg-[#1a1a1a]">
         <section class="container mx-auto px-5 py-24 text-gray-400">
+            
             <form @submit.prevent="login()"
                 class="bg-opacity-50 mx-auto mt-10 flex w-full flex-col rounded-lg bg-[#242424] p-8 shadow-lg md:mt-0 md:w-1/2 lg:w-2/6">
                 <h2 class="mb-5 text-lg font-medium text-[#aac8e4]">Register</h2>
+                <p class="bg-red-500 text-white px-2">{{ errorMessage }}</p>
                 <!-- Email input -->
                 <div class="relative mb-4">
                     <label for="email" class="text-sm leading-7 text-gray-400">Email:</label>
@@ -57,6 +59,7 @@ definePageMeta({
 const router = useRouter();
 const store = useAuthStore()
 const isLoading = ref(false)
+const errorMessage = ref('')
 const formData = reactive({
     email: '',
     password: '',
@@ -98,7 +101,8 @@ const login = () => {
         })
             .catch((error) => {
                 isLoading.value = false
-
+                errorMessage.value = error.response.data.message
+                console.log(error.response.data.message);
                 // Handle Axios error (e.g., network error)
                 console.error('Axios error:', error);
             });
